@@ -1,6 +1,6 @@
 use crate::context::salary_model::SalaryRecord;
 
-pub mod categorical {
+pub mod cat {
     use super::*;
 
     pub fn job_title_frequency(data: &[SalaryRecord]) -> std::collections::HashMap<String, usize> {

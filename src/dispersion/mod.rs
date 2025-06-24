@@ -1,11 +1,11 @@
-use crate::utils::utils::{calculate_max_value, calculate_min_value};
+use crate::utils::extrema::{calculate_max_value, calculate_min_value};
 
 pub mod measures {
     use super::*;
 
     pub fn calculate_range(data: &[f64]) -> f64 {
-        let min_value = calculate_min_value(&data);
-        let max_value = calculate_max_value(&data);
+        let min_value = calculate_min_value(data);
+        let max_value = calculate_max_value(data);
 
         max_value - min_value
     }

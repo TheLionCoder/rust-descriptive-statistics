@@ -1,8 +1,9 @@
 use crate::{
-    central_tendency::central_tendency::{calculate_mean, calculate_median, calculate_mode},
+    categorical::cat::job_title_frequency,
+    central_tendency::descriptive::{calculate_mean, calculate_median, calculate_mode},
     dispersion::measures::{calculate_range, calculate_standard_deviation, calculate_variance},
     feature::feature_engineering::experience_level_score,
-    plot::plot::{draw_histogram, draw_scatter},
+    plot::visualization::{draw_bar_chart, draw_histogram, draw_scatter},
 };
 
 mod categorical;
@@ -22,7 +23,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut seen = std::collections::HashSet::new();
     let mut unique_dataset = Vec::new();
 
-    let csv_data = fetch_dataset::fetch_dataset(&url)?;
+    let csv_data = fetch_dataset::fetch_dataset(url)?;
     let dataset = data_loading::load_csv_data(&csv_data)?;
     for record in dataset {
         let key = (
@@ -73,6 +74,10 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         .map(|level| experience_level_score(level))
         .collect();
     draw_scatter(&encode_experience_data, &salary_data)?;
+
+    // Frequency distribution
+    let frequency_distribution = job_title_frequency(&unique_dataset);
+    draw_bar_chart(frequency_distribution, Some(10))?;
 
     Ok(())
 }
