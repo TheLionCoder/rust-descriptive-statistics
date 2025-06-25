@@ -1,6 +1,7 @@
 use crate::{
     categorical::cat::job_title_frequency,
     central_tendency::descriptive::{calculate_mean, calculate_median, calculate_mode},
+    correlation::coefficients::calculate_pearson_correlation,
     dispersion::measures::{calculate_range, calculate_standard_deviation, calculate_variance},
     feature::feature_engineering::experience_level_score,
     plot::visualization::{draw_bar_chart, draw_histogram, draw_scatter},
@@ -9,12 +10,12 @@ use crate::{
 mod categorical;
 mod central_tendency;
 mod context;
+mod correlation;
 mod data_loading;
 mod dispersion;
 mod feature;
 mod fetch_dataset;
 mod plot;
-mod utils;
 
 #[allow(dead_code)]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -79,5 +80,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let frequency_distribution = job_title_frequency(&unique_dataset);
     draw_bar_chart(frequency_distribution, Some(10))?;
 
+    // Correlation
+    let remote_ratio_data: Vec<f64> = unique_dataset
+        .iter()
+        .map(|r| r.remote_ratio as f64)
+        .collect();
+    let correlation = calculate_pearson_correlation(&salary_data, &remote_ratio_data);
+    println!("Pearson Correlation coeff: {:.2}", correlation);
     Ok(())
 }
