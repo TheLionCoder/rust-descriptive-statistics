@@ -1,4 +1,4 @@
-use crate::utils::extrema::{calculate_max_value, calculate_min_value};
+use crate::central_tendency::descriptive::{calculate_max_value, calculate_min_value};
 use plotters::prelude::*;
 
 pub mod visualization {
@@ -9,8 +9,12 @@ pub mod visualization {
             .join(format!("{}.jpg", caption.to_lowercase().replace(" ", "_")));
         let drawing_area = BitMapBackend::new(&path, (640, 480)).into_drawing_area();
         drawing_area.fill(&WHITE)?;
-        let min_data_value = calculate_min_value(data);
-        let max_data_value = calculate_max_value(data);
+        let Some(min_data_value) = calculate_min_value(data) else {
+            return Ok(());
+        };
+        let Some(max_data_value) = calculate_max_value(data) else {
+            return Ok(());
+        };
 
         let mut chart_builder = ChartBuilder::on(&drawing_area);
         chart_builder
@@ -41,11 +45,18 @@ pub mod visualization {
         let drawing_area =
             BitMapBackend::new("data-viz/salary_vs_experience.png", (640, 480)).into_drawing_area();
         drawing_area.fill(&WHITE)?;
-        let max_experience = *experience.iter().max().unwrap() as f64;
-        let min_experience = *experience.iter().min().unwrap() as f64;
-
-        let max_salary = calculate_max_value(salary);
-        let min_salary = calculate_min_value(salary);
+        let Some(max_experience) = calculate_max_value(experience) else {
+            return Ok(());
+        };
+        let Some(min_experience) = calculate_max_value(experience) else {
+            return Ok(());
+        };
+        let Some(max_salary) = calculate_max_value(salary) else {
+            return Ok(());
+        };
+        let Some(min_salary) = calculate_min_value(salary) else {
+            return Ok(());
+        };
 
         let mut chart_builder = ChartBuilder::on(&drawing_area);
         chart_builder
@@ -53,8 +64,10 @@ pub mod visualization {
             .margin(10)
             .x_label_area_size(40)
             .y_label_area_size(40);
-        let mut chart_context = chart_builder
-            .build_cartesian_2d(min_experience..max_experience, min_salary..max_salary)?;
+        let mut chart_context = chart_builder.build_cartesian_2d(
+            min_experience as f64..max_experience as f64,
+            min_salary..max_salary,
+        )?;
         chart_context
             .configure_mesh()
             .x_desc("Experiencie Level")

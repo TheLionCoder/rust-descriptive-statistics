@@ -57,7 +57,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         "Standard Deviation of salaries: {:.2}",
         standard_deviation_salary
     );
-    println!("Range of salaries: {:.2}", range_salary);
+    println!("Range of salaries: {:.2?}", range_salary);
 
     // Draw histogram
     draw_histogram(&salary_data, "salary in usd")?;

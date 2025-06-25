@@ -1,13 +1,15 @@
-use crate::utils::extrema::{calculate_max_value, calculate_min_value};
+use crate::central_tendency::descriptive::{calculate_max_value, calculate_min_value};
 
 pub mod measures {
     use super::*;
 
-    pub fn calculate_range(data: &[f64]) -> f64 {
-        let min_value = calculate_min_value(data);
-        let max_value = calculate_max_value(data);
+    pub fn calculate_range(data: &[f64]) -> Option<f64> {
+        let min_opt = calculate_min_value(data);
+        let max_op = calculate_max_value(data);
 
-        max_value - min_value
+        min_opt
+            .zip(max_op)
+            .map(|(min_val, max_val)| max_val - min_val)
     }
 
     pub fn calculate_variance(data: &[f64], mean: f64) -> Option<f64> {

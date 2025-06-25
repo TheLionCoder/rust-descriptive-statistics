@@ -28,4 +28,16 @@ pub mod descriptive {
             .map(|(bits, _)| f64::from_bits(bits))
             .collect()
     }
+
+    pub fn calculate_min_value<T: std::cmp::PartialOrd + Copy>(data: &[T]) -> Option<T> {
+        data.iter()
+            .copied()
+            .min_by(|a, b| a.partial_cmp(b).unwrap())
+    }
+
+    pub fn calculate_max_value<T: std::cmp::PartialOrd + Copy>(data: &[T]) -> Option<T> {
+        data.iter()
+            .copied()
+            .max_by(|a, b| a.partial_cmp(b).unwrap())
+    }
 }
